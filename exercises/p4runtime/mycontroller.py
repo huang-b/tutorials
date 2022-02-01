@@ -114,9 +114,17 @@ def readTableRules(p4info_helper, sw):
             entry = entity.table_entry
             # TODO For extra credit, you can use the p4info_helper to translate
             #      the IDs in the entry to names
-            print("table_name: %s" % p4info_helper.get_name('tables', entry.table_id))
-            print("action_name: %s" % p4info_helper.get_name('actions', entry.action.action.action_id))
-            print(entry)
+            table_name = p4info_helper.get_name('tables', entry.table_id)
+            print("table %s match" % table_name)
+            for field in entry.match:
+                field_name = p4info_helper.get_match_field_name(table_name, field.field_id)
+                print(" - field %s: {\n%s}" % (field_name, field))
+            
+            action_name = p4info_helper.get_name('actions', entry.action.action.action_id)
+            print("action %s" % (action_name))
+            for param in entry.action.action.params:
+                param_name = p4info_helper.get_action_param_name(action_name, param.param_id)
+                print(" - param %s = %s" % (param_name, param.value))
             print('-----')
 
 
