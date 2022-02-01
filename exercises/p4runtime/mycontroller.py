@@ -118,7 +118,8 @@ def readTableRules(p4info_helper, sw):
             print("table %s match" % table_name)
             for field in entry.match:
                 field_name = p4info_helper.get_match_field_name(table_name, field.field_id)
-                print(" - field %s: {\n%s}" % (field_name, field))
+                field_value = p4info_helper.get_match_field_value(field)
+                print(" - field %s = %r" % (field_name, field_value))
             
             action_name = p4info_helper.get_name('actions', entry.action.action.action_id)
             print("action %s" % (action_name))
