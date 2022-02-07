@@ -74,6 +74,7 @@ parser MyParser(packet_in packet,
          */
         transition select(hdr.ethernet.etherType) {
             TYPE_SRCROUTING: parse_srcRouting;
+            TYPE_IPV4: parse_ipv4;
             default: accept;
         } 
     }
@@ -137,6 +138,26 @@ control MyIngress(inout headers hdr,
     action update_ttl(){
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
+
+    action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
+        standard_metadata.egress_spec = port;
+        hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
+        hdr.ethernet.dstAddr = dstAddr;
+        hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
+    }
+
+    table ipv4_lpm {
+        key = {
+            hdr.ipv4.dstAddr: lpm;
+        }
+        actions = {
+            ipv4_forward;
+            drop;
+            NoAction;
+        }
+        size = 1024;
+        default_action = NoAction();
+    }
     
     apply {
         if (hdr.srcRoutes[0].isValid()){
@@ -155,7 +176,9 @@ control MyIngress(inout headers hdr,
             if (hdr.ipv4.isValid()){
                 update_ttl();
             }
-        }else{
+        } else if (hdr.ipv4.isValid()) {
+            ipv4_lpm.apply();
+        } else {
             drop();
         } 
     }
