@@ -7,7 +7,7 @@ mininet> h2 ./receive.py > logs/h2.log &
 
 启动发送：
 ```shell
-h1 ./send.py 10.0.2.2
+mininet> h1 ./send.py 10.0.2.2
 ```
 
 ## 未支持IPv4的测试用例
