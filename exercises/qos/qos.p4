@@ -142,7 +142,6 @@ control MyIngress(inout headers hdr,
         const entries = {
             IP_PROTOCOLS_TCP: dscp_mark(DSCP_TCP);
             IP_PROTOCOLS_UDP: dscp_mark(DSCP_UDP);
-            IP_PROTOCOLS_ICMP: dscp_mark(0);
         }
     }
 
