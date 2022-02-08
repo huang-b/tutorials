@@ -20,6 +20,10 @@ const bit<8> IP_PROTOCOLS_OSPF       =  89;
 const bit<8> IP_PROTOCOLS_PIM        = 103;
 const bit<8> IP_PROTOCOLS_VRRP       = 112;
 
+/* DSCP */
+const bit<6> DSCP_TCP = 46;
+const bit<6> DSCP_UDP = 44;
+
 
 /*************************************************************************
 *********************** H E A D E R S  ***********************************
@@ -41,7 +45,8 @@ header ethernet_t {
 header ipv4_t {
     bit<4>    version;
     bit<4>    ihl;
-    bit<8>    tos;
+    bit<6>    diffserv;
+    bit<2>    ecn;
     bit<16>   totalLen;
     bit<16>   identification;
     bit<3>    flags;
@@ -118,6 +123,28 @@ control MyIngress(inout headers hdr,
     }
 
 /* TODO: Implement actions for different traffic classes */
+    action dscp_reset() {
+        hdr.ipv4.diffserv = 0;
+    }
+    action dscp_mark(bit<6> diffserv) {
+        hdr.ipv4.diffserv = diffserv;
+    }
+
+    table dscp_exact {
+        key = {
+            hdr.ipv4.protocol: exact;
+        }
+        actions = {
+            dscp_mark;
+            dscp_reset;
+        }
+        default_action = dscp_reset();
+        const entries = {
+            IP_PROTOCOLS_TCP: dscp_mark(DSCP_TCP);
+            IP_PROTOCOLS_UDP: dscp_mark(DSCP_UDP);
+            IP_PROTOCOLS_ICMP: dscp_mark(0);
+        }
+    }
 
 
     table ipv4_lpm {
@@ -137,6 +164,7 @@ control MyIngress(inout headers hdr,
     apply {
         if (hdr.ipv4.isValid()) {
             ipv4_lpm.apply();
+            dscp_exact.apply();
         }
     }
 }
@@ -163,7 +191,8 @@ control MyComputeChecksum(inout headers hdr, inout metadata meta) {
 	    hdr.ipv4.isValid(),
             { hdr.ipv4.version,
               hdr.ipv4.ihl,
-              hdr.ipv4.tos,
+              hdr.ipv4.diffserv,
+              hdr.ipv4.ecn,
               hdr.ipv4.totalLen,
               hdr.ipv4.identification,
               hdr.ipv4.flags,
