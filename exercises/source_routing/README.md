@@ -60,13 +60,13 @@ bring up a network in Mininet to test its behavior.
 5. Type a list of port numbers. say `2 3 2 2 1`.  This should send the
    packet through `h1`, `s1`, `s2`, `s3`, `s1`, `s2`, and
    `h2`. However, `h2` will not receive the message.
-   
+
 6. Type `q` to exit send.py and type `exit` to leave each xterm and
    the Mininet command line.
 
 The message was not received because each switch is programmed with
 `source_routing.p4`, which drops all packets on arrival.  You can
-verify this by looking at `/tmp/p4s.s1.log`.  Your job is to extend
+verify this by looking at `logs/s1.log`.  Your job is to extend
 the P4 code so packets are delivered to their destination.
 
 ## Step 2: Implement source routing
@@ -84,7 +84,7 @@ A complete `source_routing.p4` will contain the following components:
    `ethernet` and `srcRoutes` fields.
 3. An action to drop a packet, using `mark_to_drop()`.
 4. **TODO:** An action (called `srcRoute_nhop`), which will:
-	1. Set the egress port for the next hop. 
+	1. Set the egress port for the next hop.
 	2. remove the first entry of srcRoutes
 5. A control with an `apply` block that:
     1. checks the existence of source routes.
@@ -123,7 +123,7 @@ There are several ways that problems might manifest:
    Do you have another instance of mininet running? Did the previous
    run of mininet crash?  if yes, check "Cleaning up Mininet" bellow.
 3. `source_routing.p4` compiles but the switch does not process
-   packets in the desired way. The `/tmp/p4s.<switch-name>.log`
+   packets in the desired way. The `logs/sX.log`
    files contain trace messages describing how each switch processes
    each packet. The output is detailed and can help pinpoint logic
    errors in your implementation.  The
@@ -145,3 +145,12 @@ mn -c
 
 Congratulations, your implementation works! Move on to
 [Load Balance](../load_balance).
+
+
+## Relevant Documentation
+
+The documentation for P4_16 and P4Runtime is available [here](https://p4.org/specs/)
+
+All excercises in this repository use the v1model architecture, the documentation for which is available at:
+1. The BMv2 Simple Switch target document accessible [here](https://github.com/p4lang/behavioral-model/blob/master/docs/simple_switch.md) talks mainly about the v1model architecture.
+2. The include file `v1model.p4` has extensive comments and can be accessed [here](https://github.com/p4lang/p4c/blob/master/p4include/v1model.p4).

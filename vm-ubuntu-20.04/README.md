@@ -1,9 +1,12 @@
 # Creating the VM
 
 Start creating a brand new VM by running `vagrant up` in this
-directory (install vagrant on your system if needed).  It can take one
-to several hours, depending upon the speed of your computer and
-Internet connection.
+directory (install vagrant on your system if needed). This command
+would create a _release_ VM that includes P4 software installed from
+packages and allows to update it with `apt upgrade`. Alternatively,
+a development VM can be created by running `vagrant up dev`.
+Note that creating a development VM can take one to several hours,
+depending upon the speed of your computer and Internet connection.
 
 Steps taken to prepare a VM _after_ running `vagrant up` on the host
 OS.  Some of these could probably be automated with programs, and

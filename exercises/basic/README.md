@@ -10,7 +10,7 @@ With IPv4 forwarding, the switch must perform the following actions
 for every packet: (i) update the source and destination MAC addresses,
 (ii) decrement the time-to-live (TTL) in the IP header, and (iii)
 forward the packet out the appropriate port.
- 
+
 Your switch will have a single table, which the control plane will
 populate with static rules. Each rule will map an IP address to the
 MAC address and output port for the next hop. We have already defined
@@ -105,14 +105,14 @@ A complete `basic.p4` will contain the following components:
 2. **TODO:** Parsers for Ethernet and IPv4 that populate `ethernet_t` and `ipv4_t` fields.
 3. An action to drop a packet, using `mark_to_drop()`.
 4. **TODO:** An action (called `ipv4_forward`) that:
-	1. Sets the egress port for the next hop. 
-	2. Updates the ethernet destination address with the address of the next hop. 
-	3. Updates the ethernet source address with the address of the switch. 
+	1. Sets the egress port for the next hop.
+	2. Updates the ethernet destination address with the address of the next hop.
+	3. Updates the ethernet source address with the address of the switch.
 	4. Decrements the TTL.
 5. **TODO:** A control that:
     1. Defines a table that will read an IPv4 destination address, and
        invoke either `drop` or `ipv4_forward`.
-    2. An `apply` block that applies the table.   
+    2. An `apply` block that applies the table.
 6. **TODO:** A deparser that selects the order
     in which fields inserted into the outgoing packet.
 7. A `package` instantiation supplied with the parser, control, and deparser.
@@ -123,7 +123,7 @@ A complete `basic.p4` will contain the following components:
 ## Step 3: Run your solution
 
 Follow the instructions from Step 1. This time, you should be able to
-sucessfully ping between any two hosts in the topology. 
+sucessfully ping between any two hosts in the topology.
 
 ### Food for thought
 
@@ -170,3 +170,10 @@ these instances:
 make stop
 ```
 
+## Relevant Documentation
+
+The documentation for P4_16 and P4Runtime is available [here](https://p4.org/specs/)
+
+All excercises in this repository use the v1model architecture, the documentation for which is available at:
+1. The BMv2 Simple Switch target document accessible [here](https://github.com/p4lang/behavioral-model/blob/master/docs/simple_switch.md) talks mainly about the v1model architecture.
+2. The include file `v1model.p4` has extensive comments and can be accessed [here](https://github.com/p4lang/p4c/blob/master/p4include/v1model.p4).

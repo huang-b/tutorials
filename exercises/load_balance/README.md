@@ -1,4 +1,4 @@
-# Load Balancing 
+# Load Balancing
 
 In this exercise, you will implement a form of load balancing based on
 a simple version of Equal-Cost Multipath Forwarding. The switch you
@@ -25,12 +25,12 @@ up a switch in Mininet to test its behavior.
 1. In your shell, run:
    ```bash
    make
-   ```   
+   ```
    This will:
    * compile `load_balance.p4`, and
    * start a Mininet instance with three switches (`s1`, `s2`, `s3`) configured
      in a triangle, each connected to one host (`h1`, `h2`, `h3`).
-   * The hosts are assigned IPs of `10.0.1.1`, `10.0.2.2`, etc.  
+   * The hosts are assigned IPs of `10.0.1.1`, `10.0.2.2`, etc.
    * We use the IP address 10.0.0.1 to indicate traffic that should be
      load balanced between `h2` and `h3`.
 
@@ -38,7 +38,7 @@ up a switch in Mininet to test its behavior.
    for `h1`, `h2` and `h3`, respectively:
    ```bash
    mininet> xterm h1 h2 h3
-   ```   
+   ```
 3. Each host includes a small Python-based messaging client and
    server.  In `h2` and `h3`'s XTerms, start the servers:
    ```bash
@@ -113,7 +113,7 @@ fix your `load_balance.p4` implementation.
 
 3. `load_balance.p4` compiles, and the control plane rules are
 installed, but the switch does not process packets in the desired way.
-The `/tmp/p4s.<switch-name>.log` files contain trace messages
+The `logs/sX.log` files contain trace messages
 describing how each switch processes each packet.  The output is
 detailed and can help pinpoint logic errors in your implementation.
 
@@ -130,3 +130,11 @@ mn -c
 ## Next Steps
 
 Congratulations, your implementation works! Move on to [Multi-Hop Route Inspection](../mri).
+
+## Relevant Documentation
+
+The documentation for P4_16 and P4Runtime is available [here](https://p4.org/specs/)
+
+All excercises in this repository use the v1model architecture, the documentation for which is available at:
+1. The BMv2 Simple Switch target document accessible [here](https://github.com/p4lang/behavioral-model/blob/master/docs/simple_switch.md) talks mainly about the v1model architecture.
+2. The include file `v1model.p4` has extensive comments and can be accessed [here](https://github.com/p4lang/p4c/blob/master/p4include/v1model.p4).

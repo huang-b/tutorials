@@ -89,7 +89,7 @@ to hosts. For this step you will need to add your forwarding rules to the
 1. In your shell, run:
    ```bash
    make run
-   ``` 
+   ```
    This will:
    * compile `basic_tunnel.p4`, and
    * start a Mininet instance with three switches (`s1`, `s2`, `s3`) configured
@@ -97,39 +97,39 @@ to hosts. For this step you will need to add your forwarding rules to the
    * The hosts are assigned IPs of `10.0.1.1`, `10.0.2.2`, and `10.0.3.3`.
 
 2. You should now see a Mininet command prompt. Open two terminals for `h1` and
-`h2`, respectively: 
+`h2`, respectively:
   ```bash
   mininet> xterm h1 h2
   ```
 3. Each host includes a small Python-based messaging client and server. In
-`h2`'s xterm, start the server: 
-  ```bash 
+`h2`'s xterm, start the server:
+  ```bash
   ./receive.py
   ```
 4. First we will test without tunneling. In `h1`'s xterm, send a message to
-`h2`: 
+`h2`:
   ```bash
   ./send.py 10.0.2.2 "P4 is cool"
   ```
-  The packet should be received at `h2`. If you examine the received packet 
+  The packet should be received at `h2`. If you examine the received packet
   you should see that is consists of an Ethernet header, an IP header, a TCP
   header, and the message. If you change the destination IP address (e.g. try
   to send to `10.0.3.3`) then the message should not be received by `h2`, and
   will instead be received by `h3`.
-5. Now we test with tunneling. In `h1`'s xterm, send a message to `h2`: 
+5. Now we test with tunneling. In `h1`'s xterm, send a message to `h2`:
   ```bash
   ./send.py 10.0.2.2 "P4 is cool" --dst_id 2
   ```
   The packet should be received at `h2`. If you examine the received packet you
   should see that is consists of an Ethernet header, a tunnel header, an IP header,
-  a TCP header, and the message. 
-6. In `h1`'s xterm, send a message: 
+  a TCP header, and the message.
+6. In `h1`'s xterm, send a message:
   ```bash
   ./send.py 10.0.3.3 "P4 is cool" --dst_id 2
   ```
   The packet should be received at `h2`, even though that IP address is the address
   of `h3`. This is because the switch is no longer using the IP header for routing
-  when the `MyTunnel` header is in the packet. 
+  when the `MyTunnel` header is in the packet.
 7. Type `exit` or `Ctrl-D` to leave each xterm and the Mininet command line.
 
 
@@ -169,7 +169,7 @@ implementation or forwarding rules.
 
 3. `basic_tunnel.p4` might compile, and the control plane rules might be
 installed, but the switch might not process packets in the desired way. The
-`/tmp/p4s.<switch-name>.log` files contain detailed logs that describing how
+`logs/sX.log` files contain detailed logs that describing how
 each switch processes each packet. The output is detailed and can help pinpoint
 logic errors in your implementation.
 
@@ -187,3 +187,10 @@ make stop
 Congratulations, your implementation works! Move onto the next assignment
 [p4runtime](../p4runtime)!
 
+## Relevant Documentation
+
+The documentation for P4_16 and P4Runtime is available [here](https://p4.org/specs/)
+
+All excercises in this repository use the v1model architecture, the documentation for which is available at:
+1. The BMv2 Simple Switch target document accessible [here](https://github.com/p4lang/behavioral-model/blob/master/docs/simple_switch.md) talks mainly about the v1model architecture.
+2. The include file `v1model.p4` has extensive comments and can be accessed [here](https://github.com/p4lang/p4c/blob/master/p4include/v1model.p4).

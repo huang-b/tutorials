@@ -11,7 +11,7 @@ packet such that it is able to pick up the egress link utilization
 at each hop and deliver it to a host for monitoring purposes.
 
 Our probe packet will contain the following three header types:
-``` 
+```
 // Top-level probe header, indicates how many hops this probe
 // packet has traversed so far.
 header probe_t {
@@ -46,7 +46,7 @@ two register arrays:
 * `byte_cnt_reg` - counts the number of bytes transmitted out of
   each port since the last probe packet was transmitted out of
   the port.
-* `last_time_reg` - stores the last time that a probe packet was 
+* `last_time_reg` - stores the last time that a probe packet was
   transmitted out of each port.
 
 Our P4 program will be written for the V1Model architecture implemented
@@ -69,7 +69,7 @@ extend this skeleton program to fill out the fields in the probe
 packet.
 
 Before that, let's compile and test the incomplete `link_monitor.p4`
-program: 
+program:
 
 1. In your shell, run:
    ```bash
@@ -95,7 +95,7 @@ path indicated in link-monitor-topo.png.
    ```
 4. In the other terminal run the `receive.py` script to start
 receiving and parsing the probe packets. This allows us to monitor
-the link utilization within the network. 
+the link utilization within the network.
    ```bash
    ./receive.py
    ```
@@ -225,3 +225,10 @@ within the core of the network? For instance, how might you use this
 data, either at the hosts or at the switches, to make real-time
 load-balancing decisions?
 
+## Relevant Documentation
+
+The documentation for P4_16 and P4Runtime is available [here](https://p4.org/specs/)
+
+All excercises in this repository use the v1model architecture, the documentation for which is available at:
+1. The BMv2 Simple Switch target document accessible [here](https://github.com/p4lang/behavioral-model/blob/master/docs/simple_switch.md) talks mainly about the v1model architecture.
+2. The include file `v1model.p4` has extensive comments and can be accessed [here](https://github.com/p4lang/p4c/blob/master/p4include/v1model.p4).
